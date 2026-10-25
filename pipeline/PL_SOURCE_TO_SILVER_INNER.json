@@ -28,7 +28,7 @@
 						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					},
-					"firstRowOnly": true
+					"firstRowOnly": false
 				}
 			},
 			{
@@ -77,7 +77,7 @@
 					"source": {
 						"type": "PostgreSqlV2Source",
 						"query": {
-							"value": "select * from public.@{activity('Read Table Details').output.firstRow.source_table_name}\n",
+							"value": "@if(\n    contains(activity('Read Table Details').output, 'firstRow'),\n    concat(\n        'SELECT * FROM public.',\n        activity('Read Table Details').output.firstRow.source_table_name\n    ),\n    'SELECT 1 WHERE 1 = 0'\n)\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00"
